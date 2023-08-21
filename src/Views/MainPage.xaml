@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Monkey_Finder.MainPage"
+             xmlns:model="clr-namespace:Monkey_Finder.Models"
+             xmlns:viewmodel="clr-namespace:Monkey_Finder.ViewModels"
+             x:DataType="viewmodel:MonkeyViewModel"
+             Title="{Binding Title}">
+
+    <Grid
+        ColumnDefinitions="*,*"
+        ColumnSpacing="5"
+        RowDefinitions="*,Auto"
+        RowSpacing="0">
+
+        <RefreshView
+            Grid.ColumnSpan="2"
+            Command="{Binding GetMonkeyCommand}"
+            IsRefreshing="{Binding IsRefreshing}" >
+            <ContentView>
+                <CollectionView
+                    ItemsSource="{Binding Monkeys}"
+                    SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.EmptyView>
+                        <StackLayout Padding="100" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Image
+                                Source="dotnet_bot.png"
+                                HeightRequest="160"
+                                WidthRequest="160"/>
+                            <Label Text="No Connection :(" Style="{StaticResource MediumLabel}"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Monkey">
+                            <Grid Padding="10">
+                                <Frame HeightRequest="125" Style="{StaticResource CardView}">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MonkeyViewModel}}, Path=GoToDetailsCommand}"
+                                    CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid Padding="0" ColumnDefinitions="125,*">
+                                        <Image Source="{Binding Image}"
+                                       Aspect="AspectFill"
+                                       WidthRequest="125"
+                                       HeightRequest="125"/>
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10">
+                                            <Label Style="{StaticResource LargeLabel}" Text="{Binding Name}" />
+                                            <Label Style="{StaticResource MediumLabel}" Text="{Binding Location}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ContentView>
+        </RefreshView>
+
+        <Button Text="Get Monkeys" 
+                Command="{Binding GetMonkeyCommand}"
+                IsEnabled="{Binding IsNotBusy}"
+                Grid.Row="1"
+                Grid.Column="0"
+                Style="{StaticResource ButtonOutline}"
+                Margin="8"/>
+
+        <Button Text="Get Closest" 
+                Command="{Binding GetClosestMonkeyCommand}"
+                Grid.Column="1"
+                IsEnabled="{Binding IsNotBusy}"
+                Grid.Row="1"
+                Style="{StaticResource ButtonOutline}"
+                Margin="8"/>
+
+        <ActivityIndicator IsVisible="{Binding IsBusy}"
+                           IsRunning="{Binding IsBusy}"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Center"
+                           Color="{StaticResource TextColor2}"
+                           Grid.RowSpan="2"
+                           Grid.ColumnSpan="2"/>
+    </Grid>
+
+</ContentPage>

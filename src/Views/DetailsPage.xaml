@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Monkey_Finder.Views.DetailsPage"
+             xmlns:viewmodel="clr-namespace:Monkey_Finder.ViewModels"
+             x:DataType="viewmodel:MonkeyDetailsViewModel"
+             Title ="{Binding Title}">
+
+    <ScrollView>
+        <Grid RowDefinitions="*,Auto,*">
+
+            <!-- Background, Image of Monkey, Name -->
+            <BoxView
+                Color="{StaticResource TextColor2}"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"/>
+
+            <Border StrokeShape="RoundRectangle 100"
+                    Stroke="{StaticResource White}"
+                    StrokeThickness="5"
+                    HeightRequest="180"
+                    WidthRequest="180"
+                    Margin="0,10,0,0"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                <Image Aspect="AspectFill"
+                       Source="{Binding Monkey.Image}" 
+                       HeightRequest="180"
+                       WidthRequest="180"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
+            <Label Style="{StaticResource LargeLabel}" 
+                   Text="{Binding Monkey.Name}" 
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="End"
+                   Margin="0,0,0,20"/>
+
+            <!-- Map -->
+            <Button Text="Show on Map" 
+                    Grid.Row="1"
+                    Command="{Binding OpenMapCommand}"
+                    Margin="0,50,0,50"
+                    HorizontalOptions="Center" 
+                    WidthRequest="250" 
+                    HeightRequest="70" 
+                    CornerRadius="50"
+                    Style="{StaticResource ButtonOutline}"/>
+
+
+            <!-- Details of Monkey -->
+            <VerticalStackLayout Grid.Row="2" Padding="10" Spacing="30">
+                <Label Style="{StaticResource MediumLabel}"
+                       FontAttributes="Italic"
+                       Text="{Binding Monkey.Details}" />
+                <Label Style="{StaticResource SmallLabel}" 
+                       FontAttributes="Italic"
+                       Text="{Binding Monkey.Location, StringFormat='Location: {0}'}" />
+                <Label Style="{StaticResource SmallLabel}" 
+                       FontAttributes="Italic"
+                       Text="{Binding Monkey.Population, StringFormat='Population: {0}'}" />
+            </VerticalStackLayout>
+
+        </Grid>
+    </ScrollView>
+</ContentPage>
